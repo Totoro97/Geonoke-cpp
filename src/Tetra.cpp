@@ -187,8 +187,8 @@ Trian::Trian(Eigen::Vector3d pt0, Eigen::Vector3d pt1, Eigen::Vector3d pt2, bool
       if (std::abs(a(i) - b(i)) > 1e-5) {
         return (a(i) < b(i));
       }
-      return false;
     }
+    return false;
   };
   std::sort(points_, points_ + 3, cmp);
 }
