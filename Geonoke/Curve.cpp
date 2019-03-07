@@ -39,4 +39,10 @@ double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_b
   return distance_score * weight + heading_score * (1.0 - weight);
 }
 
+void Curve2d::Link(const Curve2d &ano_curve) {
+  for (const auto &pt : ano_curve.points_) {
+    points_.push_back(pt);
+  }
+}
+
 }
