@@ -4,15 +4,17 @@
 // std
 #include <vector>
 
+namespace Noke {
+
 class Curve2d {
 public:
   // methods
-  Curve2d(const std::vector<EVector3d> points);
+  Curve2d(const std::vector<EVector2d> points);
   ~Curve2d();
   double LinkScore(const Curve2d &ano_curve, bool is_begin = false, bool ano_is_begin = true);
 
   // data
-  std::vector<EVector3d> points_;
+  std::vector<EVector2d> points_;
 };
 
 class Curve3d {
@@ -23,3 +25,5 @@ public:
   std::vector<Eigen::Vector3d> points_;
   int num_points_;
 };
+
+}

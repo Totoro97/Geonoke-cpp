@@ -1,16 +1,17 @@
 #include "Curve.h"
 #include <cmath>
 
+namespace Noke {
 // ------------------------------------ Curve2d -----------------------------------------
 
-Curve2d::Curve2d(const std::vector<EVector3d> points): points_(points) {
+Curve2d::Curve2d(const std::vector<EVector2d> points): points_(points) {
 }
 
 Curve2d::~Curve2d() {
 }
 
 double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin) {
-  EVector3d my_pt, my_heading, ano_pt, ano_heading;
+  EVector2d my_pt, my_heading, ano_pt, ano_heading;
   if (is_begin) {
     my_pt = points_.front();
     my_heading = points_[0] - points_[1];
@@ -36,4 +37,6 @@ double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_b
   // TODO: Hard code here.
   double weight = 0.5;
   return distance_score * weight + heading_score * (1.0 - weight);
+}
+
 }
