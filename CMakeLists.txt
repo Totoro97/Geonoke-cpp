@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 #Eigen
 include_directories(/usr/include/eigen3/Eigen)
 
-set(SOURCE_FILES src/Vector.h src/Vector.cpp)
-set(SOURCE_FILES ${SOURCE_FILES} src/Curve.h src/Curve.cpp)
-set(SOURCE_FILES ${SOURCE_FILES} src/Tetra.h src/Tetra.cpp)
+set(SOURCE_FILES Geonoke/Vector.h Geonoke/Vector.cpp)
+set(SOURCE_FILES ${SOURCE_FILES} Geonoke/Curve.h Geonoke/Curve.cpp)
+set(SOURCE_FILES ${SOURCE_FILES} Geonoke/Tetra.h Geonoke/Tetra.cpp)
 
 add_library(Geonoke STATIC ${SOURCE_FILES})
 

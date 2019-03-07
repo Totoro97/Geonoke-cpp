@@ -1,3 +1,6 @@
-### Geonoke
+### Geonoke-cpp
 
-a simple geometry library.
+A simple geometry library written in c++;
+
+Only for personal use.
+
