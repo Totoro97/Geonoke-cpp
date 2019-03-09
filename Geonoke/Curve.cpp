@@ -1,10 +1,15 @@
 #include "Curve.h"
+
+#include <algorithm>
 #include <cmath>
 
 namespace Noke {
 // ------------------------------------ Curve2d -----------------------------------------
 
-Curve2d::Curve2d(const std::vector<EVector2d> points): points_(points) {
+Curve2d::Curve2d(const std::vector<EVector2d> &points): points_(points) {
+}
+
+Curve2d::Curve2d(const Curve2d &ano_curve_2d): points_(ano_curve_2d.points_) {
 }
 
 Curve2d::~Curve2d() {
@@ -35,7 +40,7 @@ double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_b
 
   double heading_score = (my_heading.dot(-ano_heading) + 1.0) / 2.0;
   // TODO: Hard code here.
-  double weight = 0.5;
+  double weight = 1.0;
   return distance_score * weight + heading_score * (1.0 - weight);
 }
 
@@ -43,6 +48,10 @@ void Curve2d::Link(const Curve2d &ano_curve) {
   for (const auto &pt : ano_curve.points_) {
     points_.push_back(pt);
   }
+}
+
+void Curve2d::Reverse() {
+  std::reverse(points_.begin(), points_.end());
 }
 
 }

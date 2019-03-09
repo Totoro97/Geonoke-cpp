@@ -9,12 +9,13 @@ namespace Noke {
 class Curve2d {
 public:
   // methods
-  Curve2d(const std::vector<EVector2d> points);
+  Curve2d(const std::vector<EVector2d> &points);
+  Curve2d(const Curve2d &ano_curve_2d);
   ~Curve2d();
 
   double LinkScore(const Curve2d &ano_curve, bool is_begin = false, bool ano_is_begin = true);
   void Link(const Curve2d &ano_curve);
-
+  void Reverse();
   // data
   std::vector<EVector2d> points_;
 };
