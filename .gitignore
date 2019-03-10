@@ -46,3 +46,7 @@ CTestTestfile.cmake
 *.idea
 cmake-build-debug
 *.directory
+
+# VS-Code
+*.vscode
+*build

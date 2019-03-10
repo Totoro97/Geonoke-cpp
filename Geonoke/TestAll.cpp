@@ -20,6 +20,7 @@ void TestCurve2d() {
   for (int i = 0; i < 11; i++)
     points.emplace_back(i, 0.0);
 
+  // Test resample.
   Curve2d curve_0(points);
   curve_0.Resample(0.5);
   Check(curve_0.points_.size() == 21, "size error");
@@ -33,6 +34,18 @@ void TestCurve2d() {
   for (int i = 0; i < 6; i++) {
     Check(curve_0.points_[i](0) == (double) i * 2.0, "step error");
   }
+
+  // Test Mean Conv.
+  points = {
+    Eigen::Vector2d(0.0, 0.0),
+    Eigen::Vector2d(1.0, 0.0),
+    Eigen::Vector2d(2.0, 0.0),
+  };
+  Curve2d curve_2(points);
+  curve_2.MeanConv(1);
+  Check(curve_2.points_[0](0) == 0.5, "Conv Error");
+  Check(curve_2.points_[1](0) == 1.0, "Conv Error");
+  Check(curve_2.points_[2](0) == 1.5, "Conv Error");
 }
 
 int main() {

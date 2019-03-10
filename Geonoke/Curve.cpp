@@ -8,12 +8,22 @@ namespace Noke {
 // ------------------------------------ Curve2d -----------------------------------------
 
 Curve2d::Curve2d(const std::vector<EVector2d> &points): points_(points) {
+  UpdateInfoFromPoints();
 }
 
 Curve2d::Curve2d(const Curve2d &ano_curve_2d): points_(ano_curve_2d.points_) {
+  UpdateInfoFromPoints();
 }
 
 Curve2d::~Curve2d() {
+}
+
+void Curve2d::UpdateInfoFromPoints() {
+  s_.resize(points_.size());
+  s_[0] = 0.0;
+  for (int i = 1; i < (int) points_.size(); i++) {
+    s_[i] = s_[i - 1] + (points_[i] - points_[i - 1]).norm();
+  }
 }
 
 double Curve2d::E2EDistance(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin) {
@@ -92,15 +102,32 @@ void Curve2d::Resample(double hope_dis) {
   }
   new_points.push_back(points_.back());
   points_ = std::move(new_points);
+  UpdateInfoFromPoints();
 }
 
 double Curve2d::Length() {
-  // TODO: Faster implementation
-  double ans = 0;
-  for (auto iter = points_.begin(); std::next(iter) != points_.end(); iter++) {
-    ans += (*std::next(iter) - *iter).norm();
+  return s_.back();
+}
+
+void Curve2d::MeanConv(int n) {
+  // TODO: Faster Conv.
+  std::vector<Eigen::Vector2d> new_points;
+  for (int i = 0; i < (int) points_.size(); i++) {
+    int cnt = 0;
+    Eigen::Vector2d pt(0.0, 0.0);
+    for (int j = std::max(0, i - n); j < i + n + 1 && j < (int) points_.size(); j++) {
+      cnt++;
+      pt += points_[j];
+    }
+    new_points.emplace_back(pt / (double) cnt);
   }
-  return ans;
+  points_ = std::move(new_points);
+  UpdateInfoFromPoints();
+}
+
+Eigen::VectorXd CalcPAD(double s, double r, int n) {
+  // TODO.
+  return Eigen::Vector2d(0, 0);
 }
 
 }

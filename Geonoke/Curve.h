@@ -13,14 +13,20 @@ public:
   Curve2d(const Curve2d &ano_curve_2d);
   ~Curve2d();
 
+  void UpdateInfoFromPoints();
   double E2EDistance(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin);
   double LinkScore(const Curve2d &ano_curve, bool is_begin = false, bool ano_is_begin = true);
   void Link(const Curve2d &ano_curve);
   void Reverse();
-  void Resample(double hope_diss);
+  void Resample(double hope_dis);
+  void MeanConv(int n);
   double Length();
-  // data
+  // Calc Pyramid Arclength Descriptor.
+  Eigen::VectorXd CalcPAD(double s, double r, int n);
+  
+  // ---- data ----
   std::vector<EVector2d> points_;
+  std::vector<double> s_;
 };
 
 class Curve3d {
