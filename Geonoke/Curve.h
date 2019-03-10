@@ -16,6 +16,7 @@ public:
   double LinkScore(const Curve2d &ano_curve, bool is_begin = false, bool ano_is_begin = true);
   void Link(const Curve2d &ano_curve);
   void Reverse();
+  void Resample(double hope_diss);
   // data
   std::vector<EVector2d> points_;
 };

@@ -11,5 +11,7 @@ set(SOURCE_FILES ${SOURCE_FILES} Geonoke/Curve.h Geonoke/Curve.cpp)
 set(SOURCE_FILES ${SOURCE_FILES} Geonoke/Tetra.h Geonoke/Tetra.cpp)
 
 add_library(Geonoke STATIC ${SOURCE_FILES})
-
 target_link_libraries(Geonoke ${OpenCV_LIBS})
+
+add_executable(TestAll ${SOURCE_FILES} Geonoke/TestAll.cpp)
+target_link_libraries(TestAll ${OpenCV_LIBS})

@@ -54,4 +54,30 @@ void Curve2d::Reverse() {
   std::reverse(points_.begin(), points_.end());
 }
 
+void Curve2d::Resample(double hope_dis) {
+  std::vector<double> dis;
+  double sum_dis = 0;
+  for (auto iter = points_.begin(); std::next(iter) != points_.end(); iter++) {
+    auto next_iter = std::next(iter);
+    dis.push_back((*iter - *next_iter).norm());
+    sum_dis += dis.back();
+  }
+  double new_size = std::ceil(sum_dis / hope_dis);
+  double new_dis = sum_dis / new_size;
+  std::vector<Eigen::Vector2d> new_points;
+  double res_dis = 0.0;
+  for (int i = 0; i + 1 < points_.size(); i++) {
+    // TODO: Hard code here.
+    const double eps = 1e-9;
+    while (res_dis > -eps && res_dis < dis[i] - eps) {
+      double bias = res_dis / dis[i];
+      new_points.emplace_back(bias * points_[i + 1] + (1.0 - bias) * points_[i]);
+      res_dis += new_dis;
+    }
+    res_dis -= dis[i];
+  }
+  new_points.push_back(points_.back());
+  points_ = std::move(new_points);
+}
+
 }
