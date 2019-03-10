@@ -15,6 +15,19 @@ Curve2d::Curve2d(const Curve2d &ano_curve_2d): points_(ano_curve_2d.points_) {
 Curve2d::~Curve2d() {
 }
 
+double Curve2d::E2EDistance(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin) {
+  EVector2d my_pt, ano_pt;
+  if (is_begin)
+    my_pt = points_.front();
+  else
+    my_pt = points_.back();
+  if (ano_is_begin)
+    ano_pt = ano_curve.points_.front();
+  else
+    ano_pt = ano_curve.points_.back();
+  return (my_pt - ano_pt).norm();
+}
+
 double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin) {
   EVector2d my_pt, my_heading, ano_pt, ano_heading;
   if (is_begin) {
@@ -40,7 +53,7 @@ double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_b
 
   double heading_score = (my_heading.dot(-ano_heading) + 1.0) / 2.0;
   // TODO: Hard code here.
-  double weight = 1.0;
+  double weight = 0.0;
   return distance_score * weight + heading_score * (1.0 - weight);
 }
 
