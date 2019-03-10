@@ -18,6 +18,7 @@ public:
   void Link(const Curve2d &ano_curve);
   void Reverse();
   void Resample(double hope_diss);
+  double Length();
   // data
   std::vector<EVector2d> points_;
 };

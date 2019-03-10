@@ -4,6 +4,7 @@
 #include <cmath>
 
 namespace Noke {
+
 // ------------------------------------ Curve2d -----------------------------------------
 
 Curve2d::Curve2d(const std::vector<EVector2d> &points): points_(points) {
@@ -91,6 +92,15 @@ void Curve2d::Resample(double hope_dis) {
   }
   new_points.push_back(points_.back());
   points_ = std::move(new_points);
+}
+
+double Curve2d::Length() {
+  // TODO: Faster implementation
+  double ans = 0;
+  for (auto iter = points_.begin(); std::next(iter) != points_.end(); iter++) {
+    ans += (*std::next(iter) - *iter).norm();
+  }
+  return ans;
 }
 
 }
