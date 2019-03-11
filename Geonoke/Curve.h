@@ -20,6 +20,9 @@ public:
   void Reverse();
   void Resample(double hope_dis);
   void MeanConv(int n);
+  
+  double Curvature(double s);
+  double CurvatureIndex(int idx);
   double Length();
   // Calc Pyramid Arclength Descriptor.
   Eigen::VectorXd CalcPAD(double s, double r, int n);

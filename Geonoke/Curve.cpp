@@ -109,6 +109,34 @@ double Curve2d::Length() {
   return s_.back();
 }
 
+double Curve2d::Curvature(double s) {
+  auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
+  int idx = (ptr - s_.data()) / sizeof(double);
+  double k0 = CurvatureIndex(idx);
+  double k1 = CurvatureIndex(idx + 1);
+  double weight = (s - s_[idx]) - (s_[idx + 1] - s_[idx]);
+  return k1 * weight + k0 * (1.0 - weight);
+}
+
+
+double Curve2d::CurvatureIndex(int idx) {
+  if (points_.size() == 2) {
+    return 0.0;
+  }
+  if (idx == 0) {
+    idx = 1;
+  }
+  else if (idx + 1 == points_.size() - 1) {
+    idx--;
+  }
+  // Curvature of 3 points:
+  // 4*triangleArea/(sideLength1*sideLength2*sideLength3)
+  // https://stackoverflow.com/questions/41144224/calculate-curvature-for-3-points-x-y
+  auto v0 = points_[idx] - points_[idx - 1];
+  auto v1 = points_[idx + 1] - points_[idx];
+  return 2.0 * (v0(0) * v1(1) - v0(1) * v1(0)) / (v0.norm() * v1.norm() * (v0 + v1).norm());
+}
+
 void Curve2d::MeanConv(int n) {
   // TODO: Faster Conv.
   std::vector<Eigen::Vector2d> new_points;
