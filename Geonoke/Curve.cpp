@@ -114,7 +114,7 @@ double Curve2d::Curvature(double s) {
   int idx = (ptr - s_.data()) / sizeof(double);
   double k0 = CurvatureIndex(idx);
   double k1 = CurvatureIndex(idx + 1);
-  double weight = (s - s_[idx]) - (s_[idx + 1] - s_[idx]);
+  double weight = (s - s_[idx]) / (s_[idx + 1] - s_[idx]);
   return k1 * weight + k0 * (1.0 - weight);
 }
 
@@ -157,7 +157,7 @@ Eigen::VectorXd Curve2d::CalcPAD(double s, double r, int n) {
   // TODO: Hard code here.
   const double eps = 1e-9;
   const double inf = 1e9;
-  const double s_step = 0.5;
+  const double s_step = 0.125;
   Eigen::VectorXd pad;
   pad = Eigen::VectorXd::Zero(n * 2);
   {
