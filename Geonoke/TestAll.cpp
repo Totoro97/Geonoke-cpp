@@ -36,16 +36,31 @@ void TestCurve2d() {
   }
 
   // Test Mean Conv.
-  points = {
-    Eigen::Vector2d(0.0, 0.0),
-    Eigen::Vector2d(1.0, 0.0),
-    Eigen::Vector2d(2.0, 0.0),
-  };
-  Curve2d curve_2(points);
-  curve_2.MeanConv(1);
-  Check(curve_2.points_[0](0) == 0.5, "Conv Error");
-  Check(curve_2.points_[1](0) == 1.0, "Conv Error");
-  Check(curve_2.points_[2](0) == 1.5, "Conv Error");
+  {
+    points = {
+      Eigen::Vector2d(0.0, 0.0),
+      Eigen::Vector2d(1.0, 0.0),
+      Eigen::Vector2d(2.0, 0.0),
+    };
+    Curve2d curve_2(points);
+    curve_2.MeanConv(1);
+    Check(curve_2.points_[0](0) == 0.5, "Conv Error");
+    Check(curve_2.points_[1](0) == 1.0, "Conv Error");
+    Check(curve_2.points_[2](0) == 1.5, "Conv Error");
+  }
+  // Test PAD.
+  {
+    std::vector<Eigen::Vector2d> points;
+    for (int i = 0; i < 10; i++) {
+      points.emplace_back(i, 0.0);
+    }
+    Curve2d curve(points);
+    auto pad = curve.CalcPAD(5.0, 0.1, 2);
+    Check(pad(0) == 0.5, "PAD Error");
+    Check(pad(1) == 1.0, "PAD Error");
+    Check(pad(2) == 1.0, "PAD Error");
+    Check(pad(3) == 0.5, "PAD Error");
+  }
 }
 
 int main() {

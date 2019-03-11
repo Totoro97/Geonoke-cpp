@@ -153,9 +153,60 @@ void Curve2d::MeanConv(int n) {
   UpdateInfoFromPoints();
 }
 
-Eigen::VectorXd CalcPAD(double s, double r, int n) {
-  // TODO.
-  return Eigen::Vector2d(0, 0);
+Eigen::VectorXd Curve2d::CalcPAD(double s, double r, int n) {
+  // TODO: Hard code here.
+  const double eps = 1e-9;
+  const double inf = 1e9;
+  const double s_step = 0.5;
+  Eigen::VectorXd pad;
+  pad = Eigen::VectorXd::Zero(n * 2);
+  {
+    double expect_k = r;
+    double current_k = 0.0;
+    double current_pos = s - 0.5 * s_step;
+    for (int t = 0; t < n; t++) {
+      while (current_pos > eps && current_k + eps < expect_k) {
+        current_k += s_step * std::abs(Curvature(current_pos));
+        current_pos -= s_step;
+      }
+      if (current_k + eps < expect_k) {
+        pad(n - t - 1) = inf;
+      }
+      else {
+        pad(n - t - 1) = s - current_pos;
+      }
+      expect_k *= 2.0;
+    }
+    double weight = 1.0;
+    for (int t = 0; t < n; t++) {
+      pad(n - t - 1) = pad(n - t - 1) * weight / pad(0);
+      weight *= 0.5;
+    }
+  }
+  {
+    double expect_k = r;
+    double current_k = 0.0;
+    double current_pos = s + 0.5 * s_step;
+    for (int t = 0; t < n; t++) {
+      while (current_pos < s_.back() - eps && current_k + eps < expect_k) {
+        current_k += s_step * std::abs(Curvature(current_pos));
+        current_pos += s_step;
+      }
+      if (current_k + eps < expect_k) {
+        pad[n + t] = inf;
+      }
+      else {
+        pad[n + t] = current_pos - s;
+      }
+      expect_k *= 2.0;
+    }
+    double weight = 1.0;
+    for (int t = 0; t < n; t++) {
+      pad(n + t) = pad(n + t) * weight / pad(n * 2 - 1);
+      weight *= 0.5;
+    }
+  }
+  return pad;
 }
 
 }
