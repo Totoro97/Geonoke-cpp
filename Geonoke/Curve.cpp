@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 namespace Noke {
 
@@ -70,7 +71,8 @@ double Curve2d::LinkScore(const Curve2d &ano_curve, bool is_begin, bool ano_is_b
 
 void Curve2d::Link(const Curve2d &ano_curve) {
   for (const auto &pt : ano_curve.points_) {
-    points_.push_back(pt);
+    if ((pt - points_.back()).norm() < 1e-9)
+      points_.push_back(pt);
   }
 }
 
@@ -111,10 +113,21 @@ double Curve2d::Length() {
 
 double Curve2d::Curvature(double s) {
   auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
-  int idx = (ptr - s_.data()) / sizeof(double);
+  int idx = (int)((ptr - s_.data())) - 1;
+  if (idx + 1 == points_.size()) {
+    idx--;
+  }
+  if (idx == -1) {
+    idx++;
+  }
   double k0 = CurvatureIndex(idx);
   double k1 = CurvatureIndex(idx + 1);
   double weight = (s - s_[idx]) / (s_[idx + 1] - s_[idx]);
+  // For debug.
+  // std::cout << "idx = " << idx << std::endl;
+  // std::cout << "Length = " << s_.back() << std::endl;
+  // std::cout << s_[idx] << " " << s << " " << s_[idx + 1] << std::endl;
+  // std::cout << "weight = " << weight << std::endl;
   return k1 * weight + k0 * (1.0 - weight);
 }
 
