@@ -136,6 +136,37 @@ Eigen::Vector2d Curve2d::At(double s) {
   return points_[idx + 1] * weight + points_[idx] * (1.0 - weight);
 }
 
+
+Eigen::Vector2d Curve2d::Tangent(double s) {
+  auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
+  int idx = (int)((ptr - s_.data())) - 1;
+  if (idx + 1 == points_.size()) {
+    idx--;
+  }
+  if (idx == -1) {
+    idx++;
+  }
+  auto v0 = TangentIndex(idx);
+  auto v1 = TangentIndex(idx + 1);
+  double weight = (s - s_[idx]) / (s_[idx + 1] - s_[idx]);
+  return v1 * weight + v0 * (1.0 - weight);
+}
+
+Eigen::Vector2d Curve2d::TangentIndex(int idx) {
+  // TODO: More accurate please.
+  if (points_.size() == 2) {
+    return (points_[1] - points_[0]) / (points_[1] - points_[0]).norm();
+  }
+  if (idx == 0) {
+    idx = 1;
+  }
+  else if (idx + 1 == points_.size()) {
+    idx--;
+  }
+  auto v = points_[idx + 1] - points_[idx - 1];
+  return v / v.norm();
+}
+
 double Curve2d::Curvature(double s) {
   auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
   int idx = (int)((ptr - s_.data())) - 1;
@@ -164,7 +195,7 @@ double Curve2d::CurvatureIndex(int idx) {
   if (idx == 0) {
     idx = 1;
   }
-  else if (idx + 1 == points_.size() - 1) {
+  else if (idx + 1 == points_.size()) {
     idx--;
   }
   // Curvature of 3 points:
@@ -245,6 +276,18 @@ Eigen::VectorXd Curve2d::CalcPAD(double s, double r, int n) {
     }
   }
   return pad;
+}
+
+Eigen::VectorXd Curve2d::CalcMultiFeatures(double s) {
+  // TODO: Hard code here.
+  Eigen::VectorXd ret;
+  int n = 6;
+  double r = 0.0125;
+  ret = Eigen::VectorXd::Zero(n * 2 + 2 + 2);
+  ret.block(0, 0, 2 * n, 1) = CalcPAD(s, r, n);
+  ret.block(2 * n, 0, 2, 1) = At(s) / 50.0;
+  ret.block(2 * n + 2, 0, 2, 1) = Tangent(s) / 5.0;
+  return ret;
 }
 
 }

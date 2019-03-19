@@ -22,12 +22,14 @@ public:
   void MeanConv(int n);
 
   Eigen::Vector2d At(double s);
+  Eigen::Vector2d Tangent(double s);
+  Eigen::Vector2d TangentIndex(int idx);
   double Curvature(double s);
   double CurvatureIndex(int idx);
   double Length();
   // Calc Pyramid Arclength Descriptor.
   Eigen::VectorXd CalcPAD(double s, double r, int n);
-  
+  Eigen::VectorXd CalcMultiFeatures(double s);
   // ---- data ----
   std::vector<EVector2d> points_;
   std::vector<double> s_;
