@@ -20,7 +20,8 @@ public:
   void Reverse();
   void Resample(double hope_dis);
   void MeanConv(int n);
-  
+
+  Eigen::Vector2d At(double s);
   double Curvature(double s);
   double CurvatureIndex(int idx);
   double Length();

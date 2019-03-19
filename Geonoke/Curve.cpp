@@ -111,6 +111,31 @@ double Curve2d::Length() {
   return s_.back();
 }
 
+
+Eigen::Vector2d Curve2d::At(double s) {
+  if (s < 1e-9) {
+    return points_.front();
+  }
+  if (s > s_.back() - 1e-9) {
+    return points_.back();
+  }
+  auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
+  int idx = (int)((ptr - s_.data())) - 1;
+  if (idx + 1 == points_.size()) {
+    idx--;
+  }
+  if (idx == -1) {
+    idx++;
+  }
+  double weight = (s - s_[idx]) / (s_[idx + 1] - s_[idx]);
+  // For debug.
+  // std::cout << "idx = " << idx << std::endl;
+  // std::cout << "Length = " << s_.back() << std::endl;
+  // std::cout << s_[idx] << " " << s << " " << s_[idx + 1] << std::endl;
+  // std::cout << "weight = " << weight << std::endl;
+  return points_[idx + 1] * weight + points_[idx] * (1.0 - weight);
+}
+
 double Curve2d::Curvature(double s) {
   auto ptr = std::lower_bound(s_.data(), s_.data() + (int) s_.size(), s - 1e-9);
   int idx = (int)((ptr - s_.data())) - 1;

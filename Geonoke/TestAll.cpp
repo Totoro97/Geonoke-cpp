@@ -61,6 +61,12 @@ void TestCurve2d() {
     Check(pad(2) == 1.0, "PAD Error");
     Check(pad(3) == 0.5, "PAD Error");
   }
+  // Test At.
+  {
+    std::vector<Eigen::Vector2d> points = { Eigen::Vector2d(0.0, 0.0), Eigen::Vector2d(1.0, 0.0) };
+    Curve2d curve(points);
+    Check(curve.At(0.5) == Eigen::Vector2d(0.5, 0.0), "At Error");
+  }
 }
 
 int main() {
