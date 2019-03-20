@@ -285,8 +285,8 @@ Eigen::VectorXd Curve2d::CalcMultiFeatures(double s) {
   double r = 0.0125;
   ret = Eigen::VectorXd::Zero(n * 2 + 2 + 2);
   ret.block(0, 0, 2 * n, 1) = CalcPAD(s, r, n);
-  ret.block(2 * n, 0, 2, 1) = At(s) / 50.0;
-  ret.block(2 * n + 2, 0, 2, 1) = Tangent(s) / 5.0;
+  ret.block(2 * n, 0, 2, 1) = At(s) / 10.0;
+  ret.block(2 * n + 2, 0, 2, 1) = Tangent(s) / 10.0;
   return ret;
 }
 
