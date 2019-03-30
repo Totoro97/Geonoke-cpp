@@ -114,7 +114,7 @@ void Tetrahedralization(const std::vector<Eigen::Vector3d>& points, std::vector<
   tetra_list.emplace_back(lim_min, lim_min + vec_x, lim_min + vec_y, lim_min + vec_z, true);
   int cnt = 0;
   for (const auto &pt : points) {
-    std::cout << "cnt = " << cnt++ << std::endl;
+    // std::cout << "cnt = " << cnt++ << std::endl;
     auto cmp = [](const Trian &a, const Trian &b){
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -149,7 +149,7 @@ void Tetrahedralization(const std::vector<Eigen::Vector3d>& points, std::vector<
       tetra_list.emplace_back(trian.points_[0], trian.points_[1], trian.points_[2], pt, true);
     }
 
-    std::cout << "tetra_num: " << tetra_list.size() << std::endl;
+    // std::cout << "tetra_num: " << tetra_list.size() << std::endl;
   }
 
   // erase super tetra.
