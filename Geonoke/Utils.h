@@ -10,5 +10,5 @@
 #include <fstream>
 
 namespace Utils {
-void SavePointsAsPly(std::string save_path, const std::vector<Eigen::Vector3d> &points);
+void SavePointsAsPly(std::string save_path, const std::vector<Eigen::Vector3d> &points, bool move_to_center = false);
 }
