@@ -16,6 +16,7 @@ public:
   void UpdateInfoFromPoints();
   double E2EDistance(const Curve2d &ano_curve, bool is_begin, bool ano_is_begin);
   double LinkScore(const Curve2d &ano_curve, bool is_begin = false, bool ano_is_begin = true);
+  bool IsSame(Curve2d *ano_curve);
   void Link(const Curve2d &ano_curve);
   void Reverse();
   void Resample(double hope_dis);
@@ -30,6 +31,8 @@ public:
   // Calc Pyramid Arclength Descriptor.
   Eigen::VectorXd CalcPAD(double s, double r, int n);
   Eigen::VectorXd CalcMultiFeatures(double s);
+
+
   // ---- data ----
   std::vector<EVector2d> points_;
   std::vector<double> s_;

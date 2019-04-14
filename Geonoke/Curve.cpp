@@ -78,6 +78,7 @@ void Curve2d::Link(const Curve2d &ano_curve) {
 
 void Curve2d::Reverse() {
   std::reverse(points_.begin(), points_.end());
+  UpdateInfoFromPoints();
 }
 
 void Curve2d::Resample(double hope_dis) {
@@ -288,6 +289,24 @@ Eigen::VectorXd Curve2d::CalcMultiFeatures(double s) {
   ret.block(2 * n, 0, 2, 1) = At(s) / 10.0;
   ret.block(2 * n + 2, 0, 2, 1) = Tangent(s) / 10.0;
   return ret;
+}
+
+bool Curve2d::IsSame(Curve2d *ano_curve) {
+  double ratio = Length() / ano_curve->Length();
+  // TODO: Hard code here.
+  if (std::abs(ratio - 1.0) > 1e-2) {
+    return false;
+  }
+  double len = Length();
+  double step_len = len / 200.0;
+  for (double s = 0.0; s < len; s += step_len) {
+    auto pos = At(s);
+    auto ano_pos = ano_curve->At(s / ratio);
+    if ((pos - ano_pos).norm() > 1e-1) {
+      return false;
+    }
+  }
+  return true;
 }
 
 }
